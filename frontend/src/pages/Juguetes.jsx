@@ -9,7 +9,7 @@ export default function Juguetes({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/juguetes')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/juguetes')
     const data = await res.json()
     setJuguetes(data)
   }
@@ -18,7 +18,7 @@ export default function Juguetes({ admin }) {
     const fd = new FormData()
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     if (foto) fd.append('foto', foto)
-    await fetch('http://localhost:3001/api/juguetes', { method: 'POST', body: fd })
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/juguetes', { method: 'POST', body: fd })
     setForm({ marca: '', nombre: '', anyo: '', material: '', rareza: '', descripcion: '' })
     setFoto(null)
     setMostrarForm(false)
@@ -26,7 +26,7 @@ export default function Juguetes({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/juguetes/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/juguetes/${id}`, { method: 'DELETE' })
     cargar()
   }
 
@@ -81,7 +81,7 @@ export default function Juguetes({ admin }) {
         {juguetes.map(juguete => (
           <div key={juguete.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {juguete.foto
-              ? <img src={`http://localhost:3001/uploads/${juguete.foto}`} alt={juguete.nombre} style={{ width: '100%', height: '180px', objectFit: 'contain', background: '#1a1410', filter: 'sepia(20%)' }} />
+              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${juguete.foto}`} alt={juguete.nombre} style={{ width: '100%', height: '180px', objectFit: 'contain', background: '#1a1410', filter: 'sepia(20%)' }} />
               : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🧸</div>
             }
             <div style={{ padding: '16px' }}>

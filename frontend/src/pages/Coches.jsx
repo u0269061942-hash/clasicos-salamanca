@@ -9,7 +9,7 @@ export default function Coches({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/coches')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/coches')
     const data = await res.json()
     setCoches(data)
   }
@@ -18,7 +18,7 @@ export default function Coches({ admin }) {
     const fd = new FormData()
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     if (foto) fd.append('foto', foto)
-    await fetch('http://localhost:3001/api/coches', { method: 'POST', body: fd })
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/coches', { method: 'POST', body: fd })
     setForm({ marca: '', modelo: '', anyo: '', cilindrada: '', color: '', descripcion: '', propietario: '' })
     setFoto(null)
     setMostrarForm(false)
@@ -26,7 +26,7 @@ export default function Coches({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/coches/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/coches/${id}`, { method: 'DELETE' })
     cargar()
   }
 
@@ -73,7 +73,7 @@ export default function Coches({ admin }) {
         {coches.map(coche => (
           <div key={coche.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {coche.foto
-              ? <img src={`http://localhost:3001/uploads/${coche.foto}`} alt={coche.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
+              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${coche.foto}`} alt={coche.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
               : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🚗</div>
             }
             <div style={{ padding: '16px' }}>

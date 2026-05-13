@@ -9,7 +9,7 @@ export default function Bicicletas({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/bicicletas')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/bicicletas')
     const data = await res.json()
     setBicicletas(data)
   }
@@ -18,7 +18,7 @@ export default function Bicicletas({ admin }) {
     const fd = new FormData()
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     if (foto) fd.append('foto', foto)
-    await fetch('http://localhost:3001/api/bicicletas', { method: 'POST', body: fd })
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/bicicletas', { method: 'POST', body: fd })
     setForm({ marca: '', modelo: '', anyo: '', tipo: '', descripcion: '', curiosidad: '' })
     setFoto(null)
     setMostrarForm(false)
@@ -26,7 +26,7 @@ export default function Bicicletas({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/bicicletas/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/bicicletas/${id}`, { method: 'DELETE' })
     cargar()
   }
 
@@ -75,7 +75,7 @@ export default function Bicicletas({ admin }) {
         {bicicletas.map(bici => (
           <div key={bici.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {bici.foto
-              ? <img src={`http://localhost:3001/uploads/${bici.foto}`} alt={bici.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
+              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${bici.foto}`} alt={bici.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
               : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🚲</div>
             }
             <div style={{ padding: '16px' }}>

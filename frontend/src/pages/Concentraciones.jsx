@@ -19,7 +19,7 @@ function Galeria({ fotos }) {
     <div style={{ position: 'relative', background: '#0a0806', border: '1px solid #2a2018', overflow: 'hidden' }}>
       <div style={{ position: 'relative', height: '480px' }}>
         <img
-          src={`http://localhost:3001/uploads/${fotos[actual].foto}`}
+          src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`}
           alt={fotos[actual].pie_foto}
           style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }}
         />
@@ -50,7 +50,7 @@ function Galeria({ fotos }) {
         {fotos.map((foto, i) => (
           <img
             key={foto.id}
-            src={`http://localhost:3001/uploads/${foto.foto}`}
+            src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`}
             alt={foto.pie_foto}
             onClick={() => setActual(i)}
             style={{
@@ -80,13 +80,13 @@ export default function Concentraciones({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/concentraciones')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/concentraciones')
     const data = await res.json()
     setConcentraciones(data)
   }
 
   const guardar = async () => {
-    await fetch('http://localhost:3001/api/concentraciones', {
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/concentraciones', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -97,14 +97,14 @@ export default function Concentraciones({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/concentraciones/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${id}`, { method: 'DELETE' })
     setSeleccionada(null)
     cargar()
   }
 
   const abrirConcentracion = async (conc) => {
     setSeleccionada(conc)
-    const res = await fetch(`http://localhost:3001/api/concentraciones/${conc.id}/fotos`)
+    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${conc.id}/fotos`)
     const data = await res.json()
     setFotos(data)
   }
@@ -120,12 +120,12 @@ export default function Concentraciones({ admin }) {
       fd.append('tipo', tipoFoto)
       const nombre = file.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').replace(/-/g, ' ')
       fd.append('pie_foto', nombre)
-      await fetch(`http://localhost:3001/api/concentraciones/${seleccionada.id}/fotos`, { method: 'POST', body: fd })
+      await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${seleccionada.id}/fotos`, { method: 'POST', body: fd })
       setProgreso(Math.round(((i + 1) / fotosFiles.length) * 100))
     }
     setFotosFiles([])
     setSubiendo(false)
-    const res = await fetch(`http://localhost:3001/api/concentraciones/${seleccionada.id}/fotos`)
+    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${seleccionada.id}/fotos`)
     const data = await res.json()
     setFotos(data)
   }

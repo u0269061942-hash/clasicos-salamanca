@@ -18,7 +18,7 @@ function Galeria({ fotos }) {
   return (
     <div style={{ position: 'relative', background: '#0a0806', border: '1px solid #2a2018', overflow: 'hidden' }}>
       <div style={{ position: 'relative', height: '480px' }}>
-        <img src={`http://localhost:3001/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
+        <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
         <button onClick={anterior} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer' }}>‹</button>
         <button onClick={siguiente} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer' }}>›</button>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(14,12,10,0.85)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -28,7 +28,7 @@ function Galeria({ fotos }) {
       </div>
       <div style={{ display: 'flex', gap: '6px', padding: '12px', overflowX: 'auto', background: '#0e0c0a' }}>
         {fotos.map((foto, i) => (
-          <img key={foto.id} src={`http://localhost:3001/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
+          <img key={foto.id} src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
         ))}
       </div>
     </div>
@@ -49,13 +49,13 @@ export default function Museos({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/museos')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/museos')
     const data = await res.json()
     setMuseos(data)
   }
 
   const guardar = async () => {
-    await fetch('http://localhost:3001/api/museos', {
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/museos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -66,14 +66,14 @@ export default function Museos({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/museos/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/museos/${id}`, { method: 'DELETE' })
     setSeleccionado(null)
     cargar()
   }
 
   const abrirMuseo = async (museo) => {
     setSeleccionado(museo)
-    const res = await fetch(`http://localhost:3001/api/museos/${museo.id}/fotos`)
+    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/museos/${museo.id}/fotos`)
     const data = await res.json()
     setFotos(data)
   }
@@ -89,12 +89,12 @@ export default function Museos({ admin }) {
       fd.append('tipo', tipoFoto)
       const nombre = file.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').replace(/-/g, ' ')
       fd.append('pie_foto', nombre)
-      await fetch(`http://localhost:3001/api/museos/${seleccionado.id}/fotos`, { method: 'POST', body: fd })
+      await fetch(`https://clasicos-salamanca-backend.onrender.com/api/museos/${seleccionado.id}/fotos`, { method: 'POST', body: fd })
       setProgreso(Math.round(((i + 1) / fotosFiles.length) * 100))
     }
     setFotosFiles([])
     setSubiendo(false)
-    const res = await fetch(`http://localhost:3001/api/museos/${seleccionado.id}/fotos`)
+    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/museos/${seleccionado.id}/fotos`)
     const data = await res.json()
     setFotos(data)
   }

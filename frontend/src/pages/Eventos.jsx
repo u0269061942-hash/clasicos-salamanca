@@ -21,13 +21,13 @@ export default function Eventos({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/eventos')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/eventos')
     const data = await res.json()
     setEventos(data)
   }
 
   const guardar = async () => {
-    await fetch('http://localhost:3001/api/eventos', {
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/eventos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -38,7 +38,7 @@ export default function Eventos({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/eventos/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/eventos/${id}`, { method: 'DELETE' })
     cargar()
   }
 

@@ -9,7 +9,7 @@ export default function Motos({ admin }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('http://localhost:3001/api/motos')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/motos')
     const data = await res.json()
     setMotos(data)
   }
@@ -18,7 +18,7 @@ export default function Motos({ admin }) {
     const fd = new FormData()
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     if (foto) fd.append('foto', foto)
-    await fetch('http://localhost:3001/api/motos', { method: 'POST', body: fd })
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/motos', { method: 'POST', body: fd })
     setForm({ marca: '', modelo: '', anyo: '', cilindrada: '', tipo: '', descripcion: '', propietario: '' })
     setFoto(null)
     setMostrarForm(false)
@@ -26,7 +26,7 @@ export default function Motos({ admin }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:3001/api/motos/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/motos/${id}`, { method: 'DELETE' })
     cargar()
   }
 
@@ -73,7 +73,7 @@ export default function Motos({ admin }) {
         {motos.map(moto => (
           <div key={moto.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {moto.foto
-              ? <img src={`http://localhost:3001/uploads/${moto.foto}`} alt={moto.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
+              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${moto.foto}`} alt={moto.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
               : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🏍️</div>
             }
             <div style={{ padding: '16px' }}>
