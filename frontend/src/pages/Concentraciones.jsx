@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import BotonInicio from '../components/BotonInicio'
 
 function Galeria({ fotos }) {
   const [actual, setActual] = useState(0)
@@ -18,55 +19,24 @@ function Galeria({ fotos }) {
   return (
     <div style={{ position: 'relative', background: '#0a0806', border: '1px solid #2a2018', overflow: 'hidden' }}>
       <div style={{ position: 'relative', height: '480px' }}>
-        <img
-          src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`}
-          alt={fotos[actual].pie_foto}
-          style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }}
-        />
-        <button onClick={anterior} style={{
-          position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
-          background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e',
-          fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif'
-        }}>‹</button>
-        <button onClick={siguiente} style={{
-          position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
-          background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e',
-          fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif'
-        }}>›</button>
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          background: 'rgba(14,12,10,0.85)', padding: '12px 16px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-        }}>
-          <div style={{ fontFamily: 'Georgia, serif', fontSize: '13px', color: '#c8a96e', letterSpacing: '2px' }}>
-            {fotos[actual].pie_foto}
-          </div>
-          <div style={{ fontSize: '12px', color: '#6a5a44', letterSpacing: '2px' }}>
-            {actual + 1} / {fotos.length}
-          </div>
+        <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
+        <button onClick={anterior} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>‹</button>
+        <button onClick={siguiente} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>›</button>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(14,12,10,0.85)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ fontFamily: 'Georgia, serif', fontSize: '13px', color: '#c8a96e', letterSpacing: '2px' }}>{fotos[actual].pie_foto}</div>
+          <div style={{ fontSize: '12px', color: '#6a5a44', letterSpacing: '2px' }}>{actual + 1} / {fotos.length}</div>
         </div>
       </div>
       <div style={{ display: 'flex', gap: '6px', padding: '12px', overflowX: 'auto', background: '#0e0c0a' }}>
         {fotos.map((foto, i) => (
-          <img
-            key={foto.id}
-            src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`}
-            alt={foto.pie_foto}
-            onClick={() => setActual(i)}
-            style={{
-              width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer',
-              filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)',
-              border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018',
-              flexShrink: 0
-            }}
-          />
+          <img key={foto.id} src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
         ))}
       </div>
     </div>
   )
 }
 
-export default function Concentraciones({ admin }) {
+export default function Concentraciones({ admin, setPagina }) {
   const [concentraciones, setConcentraciones] = useState([])
   const [form, setForm] = useState({ nombre: '', fecha: '', lugar: '', descripcion: '' })
   const [mostrarForm, setMostrarForm] = useState(false)
@@ -137,9 +107,8 @@ export default function Concentraciones({ admin }) {
     return (
       <div style={{ padding: '40px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <button onClick={() => setSeleccionada(null)} style={{ fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', padding: '8px 20px', background: 'transparent', color: '#8B4513', border: '1px solid #8B4513', cursor: 'pointer', marginBottom: '24px' }}>
-          VOLVER
+          ← VOLVER
         </button>
-
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', letterSpacing: '4px', color: '#c8a96e', fontWeight: 'bold' }}>{seleccionada.nombre}</h1>
           <div style={{ fontSize: '12px', color: '#8B4513', letterSpacing: '2px', margin: '4px 0' }}>{seleccionada.fecha} {seleccionada.lugar && `· ${seleccionada.lugar}`}</div>
@@ -207,6 +176,8 @@ export default function Concentraciones({ admin }) {
             ELIMINAR CONCENTRACION
           </button>
         )}
+
+        <BotonInicio setPagina={setPagina} />
       </div>
     )
   }
@@ -267,6 +238,8 @@ export default function Concentraciones({ admin }) {
           AUN NO HAY CONCENTRACIONES
         </div>
       )}
+
+      <BotonInicio setPagina={setPagina} />
     </div>
   )
 }

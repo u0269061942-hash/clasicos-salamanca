@@ -45,6 +45,7 @@ function App() {
   return (
     <div style={{ background: '#0e0c0a', minHeight: '100vh', color: '#e8dcc8' }}>
       <Navbar pagina={pagina} setPagina={setPagina} admin={admin} cerrarSesion={cerrarSesion} setShowLogin={setShowLogin} />
+
       {showLogin && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#120f0a', border: '2px solid #8B4513', padding: '40px', minWidth: '320px', textAlign: 'center' }}>
@@ -68,15 +69,16 @@ function App() {
           </div>
         </div>
       )}
+
       {pagina === 'inicio' && <Inicio setPagina={setPagina} />}
-      {pagina === 'eventos' && <Eventos admin={admin} />}
-      {pagina === 'concentraciones' && <Concentraciones admin={admin} />}
-      {pagina === 'museos' && <Museos admin={admin} />}
-      {pagina === 'coches' && <Coches admin={admin} />}
-      {pagina === 'motos' && <Motos admin={admin} />}
-      {pagina === 'bicicletas' && <Bicicletas admin={admin} />}
-      {pagina === 'juguetes' && <Juguetes admin={admin} />}
-      {pagina === 'asistente' && <Asistente />}
+      {pagina === 'eventos' && <Eventos admin={admin} setPagina={setPagina} />}
+      {pagina === 'concentraciones' && <Concentraciones admin={admin} setPagina={setPagina} />}
+      {pagina === 'museos' && <Museos admin={admin} setPagina={setPagina} />}
+      {pagina === 'coches' && <Coches admin={admin} setPagina={setPagina} />}
+      {pagina === 'motos' && <Motos admin={admin} setPagina={setPagina} />}
+      {pagina === 'bicicletas' && <Bicicletas admin={admin} setPagina={setPagina} />}
+      {pagina === 'juguetes' && <Juguetes admin={admin} setPagina={setPagina} />}
+      {pagina === 'asistente' && <Asistente setPagina={setPagina} />}
       <Footer />
     </div>
   )

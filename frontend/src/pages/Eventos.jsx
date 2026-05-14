@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import BotonInicio from '../components/BotonInicio'
 
 function MapaEvento({ lugar }) {
   return (
@@ -13,7 +14,7 @@ function MapaEvento({ lugar }) {
   )
 }
 
-export default function Eventos({ admin }) {
+export default function Eventos({ admin, setPagina }) {
   const [eventos, setEventos] = useState([])
   const [form, setForm] = useState({ nombre: '', fecha: '', lugar: '', descripcion: '', tipo: 'Ruta' })
   const [mostrarForm, setMostrarForm] = useState(false)
@@ -129,6 +130,8 @@ export default function Eventos({ admin }) {
           AÚN NO HAY EVENTOS — ¡AÑADE EL PRIMERO!
         </div>
       )}
+
+      <BotonInicio setPagina={setPagina} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
+import BotonInicio from '../components/BotonInicio'
 
-export default function Juguetes({ admin }) {
+export default function Juguetes({ admin, setPagina }) {
   const [juguetes, setJuguetes] = useState([])
   const [form, setForm] = useState({ marca: '', nombre: '', anyo: '', material: '', rareza: '', descripcion: '' })
   const [foto, setFoto] = useState(null)
@@ -106,6 +107,8 @@ export default function Juguetes({ admin }) {
           AÚN NO HAY JUGUETES — ¡AÑADE EL PRIMERO!
         </div>
       )}
+
+      <BotonInicio setPagina={setPagina} />
     </div>
   )
 }

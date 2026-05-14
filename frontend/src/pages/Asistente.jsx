@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
+import BotonInicio from '../components/BotonInicio'
 
 const BIENVENIDA = '¡Bienvenido a Clásicos Salamanca! Soy tu asistente experto en vehículos clásicos. Puedo ayudarte con historia, mecánica, valoraciones, restauración y mucho más. ¿Qué quieres saber?'
 
-export default function Asistente() {
+export default function Asistente({ setPagina }) {
   const [mensajes, setMensajes] = useState([{ role: 'assistant', content: BIENVENIDA }])
   const [input, setInput] = useState('')
   const [cargando, setCargando] = useState(false)
@@ -28,9 +29,7 @@ export default function Asistente() {
       const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mensajes: nuevosMensajes.map(m => ({ role: m.role, content: m.content }))
-        })
+        body: JSON.stringify({ mensajes: nuevosMensajes.map(m => ({ role: m.role, content: m.content })) })
       })
       const data = await res.json()
       setMensajes([...nuevosMensajes, { role: 'assistant', content: data.respuesta }])
@@ -68,17 +67,7 @@ export default function Asistente() {
         <div style={{ height: '420px', overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {mensajes.map((msg, i) => (
             <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
-              <div style={{
-                maxWidth: '75%',
-                padding: '12px 16px',
-                background: msg.role === 'user' ? '#8B4513' : '#1a1410',
-                border: msg.role === 'user' ? 'none' : '1px solid #2a2018',
-                color: msg.role === 'user' ? '#e8dcc8' : '#c8a96e',
-                fontFamily: 'Georgia, serif',
-                fontSize: '13px',
-                lineHeight: '1.6',
-                borderRadius: msg.role === 'user' ? '8px 8px 0 8px' : '8px 8px 8px 0'
-              }}>
+              <div style={{ maxWidth: '75%', padding: '12px 16px', background: msg.role === 'user' ? '#8B4513' : '#1a1410', border: msg.role === 'user' ? 'none' : '1px solid #2a2018', color: msg.role === 'user' ? '#e8dcc8' : '#c8a96e', fontFamily: 'Georgia, serif', fontSize: '13px', lineHeight: '1.6', borderRadius: msg.role === 'user' ? '8px 8px 0 8px' : '8px 8px 8px 0' }}>
                 {msg.content}
               </div>
             </div>
@@ -94,14 +83,7 @@ export default function Asistente() {
         </div>
 
         <div style={{ padding: '12px 16px', borderTop: '1px solid #2a2018', display: 'flex', gap: '8px' }}>
-          <input
-            type="text"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && enviar()}
-            placeholder="Pregunta sobre cualquier clásico..."
-            style={{ flex: 1, padding: '10px 14px', background: '#1a1410', border: '1px solid #3a2e22', color: '#e8dcc8', fontFamily: 'Georgia, serif', fontSize: '13px' }}
-          />
+          <input type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && enviar()} placeholder="Pregunta sobre cualquier clásico..." style={{ flex: 1, padding: '10px 14px', background: '#1a1410', border: '1px solid #3a2e22', color: '#e8dcc8', fontFamily: 'Georgia, serif', fontSize: '13px' }} />
           <button onClick={enviar} disabled={cargando} style={{ padding: '10px 20px', background: cargando ? '#3a2e22' : '#8B4513', color: '#e8dcc8', border: 'none', fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', cursor: cargando ? 'wait' : 'pointer' }}>
             ENVIAR
           </button>
@@ -112,16 +94,14 @@ export default function Asistente() {
         <div style={{ fontSize: '11px', color: '#6a5a44', letterSpacing: '2px', marginBottom: '10px' }}>SUGERENCIAS</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {sugerencias.map((s, i) => (
-            <button key={i} onClick={() => setInput(s)} style={{
-              fontSize: '12px', padding: '6px 12px',
-              background: 'transparent', border: '1px solid #2a2018',
-              color: '#a89070', cursor: 'pointer', fontFamily: 'Georgia, serif'
-            }}>
+            <button key={i} onClick={() => setInput(s)} style={{ fontSize: '12px', padding: '6px 12px', background: 'transparent', border: '1px solid #2a2018', color: '#a89070', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
               {s}
             </button>
           ))}
         </div>
       </div>
+
+      <BotonInicio setPagina={setPagina} />
     </div>
   )
 }

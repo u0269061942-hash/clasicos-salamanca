@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import BotonInicio from '../components/BotonInicio'
 
 function Galeria({ fotos }) {
   const [actual, setActual] = useState(0)
@@ -35,7 +36,7 @@ function Galeria({ fotos }) {
   )
 }
 
-export default function Museos({ admin }) {
+export default function Museos({ admin, setPagina }) {
   const [museos, setMuseos] = useState([])
   const [form, setForm] = useState({ nombre: '', fecha: '', lugar: '', descripcion: '' })
   const [mostrarForm, setMostrarForm] = useState(false)
@@ -106,7 +107,7 @@ export default function Museos({ admin }) {
     return (
       <div style={{ padding: '40px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <button onClick={() => setSeleccionado(null)} style={{ fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', padding: '8px 20px', background: 'transparent', color: '#8B4513', border: '1px solid #8B4513', cursor: 'pointer', marginBottom: '24px' }}>
-          VOLVER
+          ← VOLVER
         </button>
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', letterSpacing: '4px', color: '#c8a96e', fontWeight: 'bold' }}>{seleccionado.nombre}</h1>
@@ -175,6 +176,8 @@ export default function Museos({ admin }) {
             ELIMINAR MUSEO
           </button>
         )}
+
+        <BotonInicio setPagina={setPagina} />
       </div>
     )
   }
@@ -235,6 +238,8 @@ export default function Museos({ admin }) {
           AUN NO HAY MUSEOS
         </div>
       )}
+
+      <BotonInicio setPagina={setPagina} />
     </div>
   )
 }
