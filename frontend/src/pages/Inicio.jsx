@@ -29,11 +29,8 @@ export default function Inicio({ setPagina }) {
               borderRadius: '50%', border: '3px solid #8B4513',
               objectFit: 'cover', marginBottom: '16px'
             }} />
-          <div style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(11px, 2.5vw, 16px)', letterSpacing: '4px', color: '#8B4513', marginBottom: '8px' }}>
-            — SALAMANCA —
-          </div>
-          <div style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(36px, 10vw, 56px)', letterSpacing: '6px', color: '#c8a96e', lineHeight: 1, marginBottom: '8px', fontWeight: 'bold' }}>
-            CLÁSICOS
+          <div style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(13px, 3vw, 20px)', letterSpacing: '4px', color: '#FFD700', marginBottom: '8px', fontWeight: 'bold' }}>
+            — CLÁSICOS SALAMANCA —
           </div>
           <div style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(13px, 3vw, 18px)', letterSpacing: '2px', color: '#e8dcc8', marginBottom: '20px' }}>
             Un grupo de amigos unidos por la pasión
