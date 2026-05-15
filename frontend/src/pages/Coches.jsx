@@ -10,7 +10,7 @@ export default function Motos({ admin, setPagina }) {
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/motos')
+    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/coches')
     const data = await res.json()
     setMotos(data)
   }
@@ -19,7 +19,7 @@ export default function Motos({ admin, setPagina }) {
     const fd = new FormData()
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     if (foto) fd.append('foto', foto)
-    await fetch('https://clasicos-salamanca-backend.onrender.com/api/motos', { method: 'POST', body: fd })
+    await fetch('https://clasicos-salamanca-backend.onrender.com/api/coches', { method: 'POST', body: fd })
     setForm({ marca: '', modelo: '', anyo: '', cilindrada: '', tipo: '', descripcion: '', propietario: '' })
     setFoto(null)
     setMostrarForm(false)
@@ -27,7 +27,7 @@ export default function Motos({ admin, setPagina }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/motos/${id}`, { method: 'DELETE' })
+    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/coches/${id}`, { method: 'DELETE' })
     cargar()
   }
 
