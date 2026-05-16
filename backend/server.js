@@ -41,144 +41,144 @@ app.post('/api/login', (req, res) => {
 })
 
 // COCHES
-app.get('/api/coches', (req, res) => {
-  const coches = db.prepare('SELECT * FROM coches ORDER BY creado_en DESC').all()
-  res.json(coches)
+app.get('/api/coches', async (req, res) => {
+  const result = await db.execute('SELECT * FROM coches ORDER BY creado_en DESC')
+  res.json(result.rows)
 })
-app.post('/api/coches', upload.single('foto'), (req, res) => {
+app.post('/api/coches', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, cilindrada, color, descripcion, propietario } = req.body
   const foto = req.file ? req.file.filename : null
-  const result = db.prepare(`INSERT INTO coches (marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run(marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto)
+  const result = await db.execute({ sql: `INSERT INTO coches (marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto] })
   res.json({ id: result.lastInsertRowid })
 })
-app.delete('/api/coches/:id', (req, res) => {
-  db.prepare('DELETE FROM coches WHERE id = ?').run(req.params.id)
+app.delete('/api/coches/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM coches WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // MOTOS
-app.get('/api/motos', (req, res) => {
-  const motos = db.prepare('SELECT * FROM motos ORDER BY creado_en DESC').all()
-  res.json(motos)
+app.get('/api/motos', async (req, res) => {
+  const result = await db.execute('SELECT * FROM motos ORDER BY creado_en DESC')
+  res.json(result.rows)
 })
-app.post('/api/motos', upload.single('foto'), (req, res) => {
+app.post('/api/motos', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, cilindrada, tipo, descripcion, propietario } = req.body
   const foto = req.file ? req.file.filename : null
-  const result = db.prepare(`INSERT INTO motos (marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run(marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto)
+  const result = await db.execute({ sql: `INSERT INTO motos (marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto] })
   res.json({ id: result.lastInsertRowid })
 })
-app.delete('/api/motos/:id', (req, res) => {
-  db.prepare('DELETE FROM motos WHERE id = ?').run(req.params.id)
+app.delete('/api/motos/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM motos WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // BICICLETAS
-app.get('/api/bicicletas', (req, res) => {
-  const bicicletas = db.prepare('SELECT * FROM bicicletas ORDER BY creado_en DESC').all()
-  res.json(bicicletas)
+app.get('/api/bicicletas', async (req, res) => {
+  const result = await db.execute('SELECT * FROM bicicletas ORDER BY creado_en DESC')
+  res.json(result.rows)
 })
-app.post('/api/bicicletas', upload.single('foto'), (req, res) => {
+app.post('/api/bicicletas', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, tipo, descripcion, curiosidad } = req.body
   const foto = req.file ? req.file.filename : null
-  const result = db.prepare(`INSERT INTO bicicletas (marca, modelo, anyo, tipo, descripcion, curiosidad, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(marca, modelo, anyo, tipo, descripcion, curiosidad, foto)
+  const result = await db.execute({ sql: `INSERT INTO bicicletas (marca, modelo, anyo, tipo, descripcion, curiosidad, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, tipo, descripcion, curiosidad, foto] })
   res.json({ id: result.lastInsertRowid })
 })
-app.delete('/api/bicicletas/:id', (req, res) => {
-  db.prepare('DELETE FROM bicicletas WHERE id = ?').run(req.params.id)
+app.delete('/api/bicicletas/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM bicicletas WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // JUGUETES
-app.get('/api/juguetes', (req, res) => {
-  const juguetes = db.prepare('SELECT * FROM juguetes ORDER BY creado_en DESC').all()
-  res.json(juguetes)
+app.get('/api/juguetes', async (req, res) => {
+  const result = await db.execute('SELECT * FROM juguetes ORDER BY creado_en DESC')
+  res.json(result.rows)
 })
-app.post('/api/juguetes', upload.single('foto'), (req, res) => {
+app.post('/api/juguetes', upload.single('foto'), async (req, res) => {
   const { marca, nombre, anyo, material, rareza, descripcion } = req.body
   const foto = req.file ? req.file.filename : null
-  const result = db.prepare(`INSERT INTO juguetes (marca, nombre, anyo, material, rareza, descripcion, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(marca, nombre, anyo, material, rareza, descripcion, foto)
+  const result = await db.execute({ sql: `INSERT INTO juguetes (marca, nombre, anyo, material, rareza, descripcion, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`, args: [marca, nombre, anyo, material, rareza, descripcion, foto] })
   res.json({ id: result.lastInsertRowid })
 })
-app.delete('/api/juguetes/:id', (req, res) => {
-  db.prepare('DELETE FROM juguetes WHERE id = ?').run(req.params.id)
+app.delete('/api/juguetes/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM juguetes WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // CONCENTRACIONES
-app.get('/api/concentraciones', (req, res) => {
-  const concentraciones = db.prepare('SELECT * FROM concentraciones ORDER BY fecha DESC').all()
-  res.json(concentraciones)
+app.get('/api/concentraciones', async (req, res) => {
+  const result = await db.execute('SELECT * FROM concentraciones ORDER BY fecha DESC')
+  res.json(result.rows)
 })
-app.post('/api/concentraciones', (req, res) => {
+app.post('/api/concentraciones', async (req, res) => {
   const { nombre, fecha, lugar, descripcion } = req.body
-  const result = db.prepare(`INSERT INTO concentraciones (nombre, fecha, lugar, descripcion) VALUES (?, ?, ?, ?)`).run(nombre, fecha, lugar, descripcion)
-  res.json({ id: result.lastInsertRowid })
+  const result = await db.execute({ sql: `INSERT INTO concentraciones (nombre, fecha, lugar, descripcion) VALUES (?, ?, ?, ?)`, args: [nombre, fecha, lugar, descripcion] })
+  res.json({ id: Number(result.lastInsertRowid) })
 })
-app.post('/api/concentraciones/:id/fotos', upload.single('foto'), (req, res) => {
+app.post('/api/concentraciones/:id/fotos', upload.single('foto'), async (req, res) => {
   const { tipo, pie_foto } = req.body
   const foto = req.file ? req.file.filename : null
-  db.prepare(`INSERT INTO fotos_concentracion (concentracion_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`).run(req.params.id, foto, tipo, pie_foto)
+  await db.execute({ sql: `INSERT INTO fotos_concentracion (concentracion_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`, args: [req.params.id, foto, tipo, pie_foto] })
   res.json({ ok: true })
 })
-app.get('/api/concentraciones/:id/fotos', (req, res) => {
-  const fotos = db.prepare('SELECT * FROM fotos_concentracion WHERE concentracion_id = ?').all(req.params.id)
-  res.json(fotos)
+app.get('/api/concentraciones/:id/fotos', async (req, res) => {
+  const result = await db.execute({ sql: 'SELECT * FROM fotos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
+  res.json(result.rows)
 })
-app.post('/api/concentraciones/:id/videos', upload.single('video'), (req, res) => {
+app.post('/api/concentraciones/:id/videos', upload.single('video'), async (req, res) => {
   const { pie_video } = req.body
   const video = req.file ? req.file.filename : null
-  db.prepare(`INSERT INTO videos_concentracion (concentracion_id, video, pie_video) VALUES (?, ?, ?)`).run(req.params.id, video, pie_video)
+  await db.execute({ sql: `INSERT INTO videos_concentracion (concentracion_id, video, pie_video) VALUES (?, ?, ?)`, args: [req.params.id, video, pie_video] })
   res.json({ ok: true })
 })
-app.get('/api/concentraciones/:id/videos', (req, res) => {
-  const videos = db.prepare('SELECT * FROM videos_concentracion WHERE concentracion_id = ?').all(req.params.id)
-  res.json(videos)
+app.get('/api/concentraciones/:id/videos', async (req, res) => {
+  const result = await db.execute({ sql: 'SELECT * FROM videos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
+  res.json(result.rows)
 })
-app.delete('/api/concentraciones/:id', (req, res) => {
-  db.prepare('DELETE FROM fotos_concentracion WHERE concentracion_id = ?').run(req.params.id)
-  db.prepare('DELETE FROM videos_concentracion WHERE concentracion_id = ?').run(req.params.id)
-  db.prepare('DELETE FROM concentraciones WHERE id = ?').run(req.params.id)
+app.delete('/api/concentraciones/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM fotos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
+  await db.execute({ sql: 'DELETE FROM videos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
+  await db.execute({ sql: 'DELETE FROM concentraciones WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // MUSEOS
-app.get('/api/museos', (req, res) => {
-  const museos = db.prepare('SELECT * FROM museos ORDER BY fecha DESC').all()
-  res.json(museos)
+app.get('/api/museos', async (req, res) => {
+  const result = await db.execute('SELECT * FROM museos ORDER BY fecha DESC')
+  res.json(result.rows)
 })
-app.post('/api/museos', (req, res) => {
+app.post('/api/museos', async (req, res) => {
   const { nombre, fecha, lugar, descripcion } = req.body
-  const result = db.prepare(`INSERT INTO museos (nombre, fecha, lugar, descripcion) VALUES (?, ?, ?, ?)`).run(nombre, fecha, lugar, descripcion)
-  res.json({ id: result.lastInsertRowid })
+  const result = await db.execute({ sql: `INSERT INTO museos (nombre, fecha, lugar, descripcion) VALUES (?, ?, ?, ?)`, args: [nombre, fecha, lugar, descripcion] })
+  res.json({ id: Number(result.lastInsertRowid) })
 })
-app.post('/api/museos/:id/fotos', upload.single('foto'), (req, res) => {
+app.post('/api/museos/:id/fotos', upload.single('foto'), async (req, res) => {
   const { tipo, pie_foto } = req.body
   const foto = req.file ? req.file.filename : null
-  db.prepare(`INSERT INTO fotos_museo (museo_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`).run(req.params.id, foto, tipo, pie_foto)
+  await db.execute({ sql: `INSERT INTO fotos_museo (museo_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`, args: [req.params.id, foto, tipo, pie_foto] })
   res.json({ ok: true })
 })
-app.get('/api/museos/:id/fotos', (req, res) => {
-  const fotos = db.prepare('SELECT * FROM fotos_museo WHERE museo_id = ?').all(req.params.id)
-  res.json(fotos)
+app.get('/api/museos/:id/fotos', async (req, res) => {
+  const result = await db.execute({ sql: 'SELECT * FROM fotos_museo WHERE museo_id = ?', args: [req.params.id] })
+  res.json(result.rows)
 })
-app.delete('/api/museos/:id', (req, res) => {
-  db.prepare('DELETE FROM fotos_museo WHERE museo_id = ?').run(req.params.id)
-  db.prepare('DELETE FROM museos WHERE id = ?').run(req.params.id)
+app.delete('/api/museos/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM fotos_museo WHERE museo_id = ?', args: [req.params.id] })
+  await db.execute({ sql: 'DELETE FROM museos WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
 // EVENTOS
-app.get('/api/eventos', (req, res) => {
-  const eventos = db.prepare('SELECT * FROM eventos ORDER BY fecha ASC').all()
-  res.json(eventos)
+app.get('/api/eventos', async (req, res) => {
+  const result = await db.execute('SELECT * FROM eventos ORDER BY fecha ASC')
+  res.json(result.rows)
 })
-app.post('/api/eventos', (req, res) => {
+app.post('/api/eventos', async (req, res) => {
   const { nombre, fecha, lugar, descripcion, tipo } = req.body
-  const result = db.prepare(`INSERT INTO eventos (nombre, fecha, lugar, descripcion, tipo) VALUES (?, ?, ?, ?, ?)`).run(nombre, fecha, lugar, descripcion, tipo)
-  res.json({ id: result.lastInsertRowid })
+  const result = await db.execute({ sql: `INSERT INTO eventos (nombre, fecha, lugar, descripcion, tipo) VALUES (?, ?, ?, ?, ?)`, args: [nombre, fecha, lugar, descripcion, tipo] })
+  res.json({ id: Number(result.lastInsertRowid) })
 })
-app.delete('/api/eventos/:id', (req, res) => {
-  db.prepare('DELETE FROM eventos WHERE id = ?').run(req.params.id)
+app.delete('/api/eventos/:id', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM eventos WHERE id = ?', args: [req.params.id] })
   res.json({ ok: true })
 })
 
