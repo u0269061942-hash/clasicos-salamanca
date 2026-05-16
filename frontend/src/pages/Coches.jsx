@@ -38,7 +38,7 @@ export default function Motos({ admin, setPagina }) {
     <div style={{ padding: '40px 24px', maxWidth: '1100px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', letterSpacing: '5px', color: '#c8a96e', fontWeight: 'bold' }}>MOTOS CLÁSICAS</h1>
+          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', letterSpacing: '5px', color: '#c8a96e', fontWeight: 'bold' }}>COCHES CLÁSICOS</h1>
           <p style={{ color: '#6a5a44', letterSpacing: '2px', fontSize: '12px' }}>{motos.length} MOTOS EN LA BASE DE DATOS</p>
         </div>
         {admin && (
