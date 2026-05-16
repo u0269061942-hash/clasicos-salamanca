@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BotonInicio from '../components/BotonInicio'
 
+const API = 'https://clasicos-salamanca-backend.onrender.com'
+
 function Galeria({ fotos }) {
   const [actual, setActual] = useState(0)
 
@@ -19,7 +21,7 @@ function Galeria({ fotos }) {
   return (
     <div style={{ position: 'relative', background: '#0a0806', border: '1px solid #2a2018', overflow: 'hidden' }}>
       <div style={{ position: 'relative', height: '480px' }}>
-        <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
+        <img src={`${API}/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
         <button onClick={anterior} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>‹</button>
         <button onClick={siguiente} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>›</button>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(14,12,10,0.85)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -29,7 +31,7 @@ function Galeria({ fotos }) {
       </div>
       <div style={{ display: 'flex', gap: '6px', padding: '12px', overflowX: 'auto', background: '#0e0c0a' }}>
         {fotos.map((foto, i) => (
-          <img key={foto.id} src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
+          <img key={foto.id} src={`${API}/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
         ))}
       </div>
     </div>
@@ -46,17 +48,21 @@ export default function Concentraciones({ admin, setPagina }) {
   const [tipoFoto, setTipoFoto] = useState('coche')
   const [subiendo, setSubiendo] = useState(false)
   const [progreso, setProgreso] = useState(0)
+  const [videos, setVideos] = useState([])
+  const [videosFiles, setVideosFiles] = useState([])
+  const [subiendoVideo, setSubiendoVideo] = useState(false)
+  const [progresoVideo, setProgresoVideo] = useState(0)
 
   useEffect(() => { cargar() }, [])
 
   const cargar = async () => {
-    const res = await fetch('https://clasicos-salamanca-backend.onrender.com/api/concentraciones')
+    const res = await fetch(`${API}/api/concentraciones`)
     const data = await res.json()
     setConcentraciones(data)
   }
 
   const guardar = async () => {
-    await fetch('https://clasicos-salamanca-backend.onrender.com/api/concentraciones', {
+    await fetch(`${API}/api/concentraciones`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -67,16 +73,19 @@ export default function Concentraciones({ admin, setPagina }) {
   }
 
   const eliminar = async (id) => {
-    await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${id}`, { method: 'DELETE' })
+    await fetch(`${API}/api/concentraciones/${id}`, { method: 'DELETE' })
     setSeleccionada(null)
     cargar()
   }
 
   const abrirConcentracion = async (conc) => {
     setSeleccionada(conc)
-    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${conc.id}/fotos`)
+    const res = await fetch(`${API}/api/concentraciones/${conc.id}/fotos`)
     const data = await res.json()
     setFotos(data)
+    const resV = await fetch(`${API}/api/concentraciones/${conc.id}/videos`)
+    const dataV = await resV.json()
+    setVideos(dataV)
   }
 
   const subirFotos = async () => {
@@ -90,14 +99,33 @@ export default function Concentraciones({ admin, setPagina }) {
       fd.append('tipo', tipoFoto)
       const nombre = file.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').replace(/-/g, ' ')
       fd.append('pie_foto', nombre)
-      await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${seleccionada.id}/fotos`, { method: 'POST', body: fd })
+      await fetch(`${API}/api/concentraciones/${seleccionada.id}/fotos`, { method: 'POST', body: fd })
       setProgreso(Math.round(((i + 1) / fotosFiles.length) * 100))
     }
     setFotosFiles([])
     setSubiendo(false)
-    const res = await fetch(`https://clasicos-salamanca-backend.onrender.com/api/concentraciones/${seleccionada.id}/fotos`)
+    const res = await fetch(`${API}/api/concentraciones/${seleccionada.id}/fotos`)
     const data = await res.json()
     setFotos(data)
+  }
+
+  const subirVideos = async () => {
+    if (videosFiles.length === 0) return
+    setSubiendoVideo(true)
+    setProgresoVideo(0)
+    for (let i = 0; i < videosFiles.length; i++) {
+      const file = videosFiles[i]
+      const fd = new FormData()
+      fd.append('video', file)
+      fd.append('pie_video', file.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').replace(/-/g, ' '))
+      await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos`, { method: 'POST', body: fd })
+      setProgresoVideo(Math.round(((i + 1) / videosFiles.length) * 100))
+    }
+    setVideosFiles([])
+    setSubiendoVideo(false)
+    const res = await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos`)
+    const data = await res.json()
+    setVideos(data)
   }
 
   const estiloInput = { width: '100%', padding: '8px 12px', background: '#1a1410', border: '1px solid #3a2e22', color: '#e8dcc8', fontFamily: 'Georgia, serif', fontSize: '13px', marginBottom: '10px' }
@@ -113,41 +141,61 @@ export default function Concentraciones({ admin, setPagina }) {
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', letterSpacing: '4px', color: '#c8a96e', fontWeight: 'bold' }}>{seleccionada.nombre}</h1>
           <div style={{ fontSize: '12px', color: '#8B4513', letterSpacing: '2px', margin: '4px 0' }}>{seleccionada.fecha} {seleccionada.lugar && `· ${seleccionada.lugar}`}</div>
           {seleccionada.descripcion && <div style={{ fontSize: '13px', color: '#a89070', marginTop: '8px', lineHeight: '1.6' }}>{seleccionada.descripcion}</div>}
-          <div style={{ fontSize: '12px', color: '#6a5a44', marginTop: '8px', letterSpacing: '2px' }}>{fotos.length} FOTOS</div>
+          <div style={{ fontSize: '12px', color: '#6a5a44', marginTop: '8px', letterSpacing: '2px' }}>{fotos.length} FOTOS · {videos.length} VIDEOS</div>
         </div>
 
         {admin && (
-          <div style={{ background: '#120f0a', border: '1px solid #2a2018', borderLeft: '3px solid #8B4513', padding: '20px', marginBottom: '32px' }}>
-            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '16px', color: '#c8a96e', marginBottom: '16px', letterSpacing: '2px' }}>SUBIR FOTOS</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '12px' }}>
-              <div>
-                <label style={estiloLabel}>Tipo de fotos</label>
-                <select style={estiloInput} value={tipoFoto} onChange={e => setTipoFoto(e.target.value)}>
-                  <option value="coche">Coches</option>
-                  <option value="moto">Motos</option>
-                  <option value="museo">Museo</option>
-                  <option value="grupo">Grupo</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </div>
-              <div>
-                <label style={estiloLabel}>Seleccionar fotos (hasta 40)</label>
-                <input type="file" accept="image/*" multiple onChange={e => setFotosFiles(Array.from(e.target.files))} style={{ color: '#e8dcc8', marginBottom: '10px' }} />
-                {fotosFiles.length > 0 && <div style={{ fontSize: '12px', color: '#8B4513' }}>{fotosFiles.length} fotos seleccionadas</div>}
-              </div>
-            </div>
-            {subiendo && (
-              <div style={{ marginBottom: '12px' }}>
-                <div style={{ fontSize: '12px', color: '#c8a96e', marginBottom: '6px' }}>Subiendo... {progreso}%</div>
-                <div style={{ height: '4px', background: '#2a2018', borderRadius: '2px' }}>
-                  <div style={{ height: '4px', background: '#8B4513', borderRadius: '2px', width: `${progreso}%`, transition: 'width 0.3s' }} />
+          <>
+            <div style={{ background: '#120f0a', border: '1px solid #2a2018', borderLeft: '3px solid #8B4513', padding: '20px', marginBottom: '16px' }}>
+              <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '16px', color: '#c8a96e', marginBottom: '16px', letterSpacing: '2px' }}>SUBIR FOTOS</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '12px' }}>
+                <div>
+                  <label style={estiloLabel}>Tipo de fotos</label>
+                  <select style={estiloInput} value={tipoFoto} onChange={e => setTipoFoto(e.target.value)}>
+                    <option value="coche">Coches</option>
+                    <option value="moto">Motos</option>
+                    <option value="museo">Museo</option>
+                    <option value="grupo">Grupo</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={estiloLabel}>Seleccionar fotos (hasta 40)</label>
+                  <input type="file" accept="image/*" multiple onChange={e => setFotosFiles(Array.from(e.target.files))} style={{ color: '#e8dcc8', marginBottom: '10px' }} />
+                  {fotosFiles.length > 0 && <div style={{ fontSize: '12px', color: '#8B4513' }}>{fotosFiles.length} fotos seleccionadas</div>}
                 </div>
               </div>
-            )}
-            <button onClick={subirFotos} disabled={subiendo || fotosFiles.length === 0} style={{ fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', padding: '10px 32px', background: subiendo ? '#3a2e22' : '#8B4513', color: '#e8dcc8', border: 'none', cursor: subiendo ? 'wait' : 'pointer' }}>
-              {subiendo ? `SUBIENDO ${progreso}%` : `SUBIR ${fotosFiles.length} FOTOS`}
-            </button>
-          </div>
+              {subiendo && (
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '12px', color: '#c8a96e', marginBottom: '6px' }}>Subiendo... {progreso}%</div>
+                  <div style={{ height: '4px', background: '#2a2018', borderRadius: '2px' }}>
+                    <div style={{ height: '4px', background: '#8B4513', borderRadius: '2px', width: `${progreso}%`, transition: 'width 0.3s' }} />
+                  </div>
+                </div>
+              )}
+              <button onClick={subirFotos} disabled={subiendo || fotosFiles.length === 0} style={{ fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', padding: '10px 32px', background: subiendo ? '#3a2e22' : '#8B4513', color: '#e8dcc8', border: 'none', cursor: subiendo ? 'wait' : 'pointer' }}>
+                {subiendo ? `SUBIENDO ${progreso}%` : `SUBIR ${fotosFiles.length} FOTOS`}
+              </button>
+            </div>
+
+            <div style={{ background: '#120f0a', border: '1px solid #2a2018', borderLeft: '3px solid #8B4513', padding: '20px', marginBottom: '32px' }}>
+              <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '16px', color: '#c8a96e', marginBottom: '16px', letterSpacing: '2px' }}>SUBIR VIDEOS</h3>
+              <label style={estiloLabel}>Seleccionar videos</label>
+              <input type="file" accept="video/*" multiple onChange={e => setVideosFiles(Array.from(e.target.files))} style={{ color: '#e8dcc8', marginBottom: '10px' }} />
+              {videosFiles.length > 0 && <div style={{ fontSize: '12px', color: '#8B4513', marginBottom: '10px' }}>{videosFiles.length} videos seleccionados</div>}
+              {subiendoVideo && (
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '12px', color: '#c8a96e', marginBottom: '6px' }}>Subiendo... {progresoVideo}%</div>
+                  <div style={{ height: '4px', background: '#2a2018', borderRadius: '2px' }}>
+                    <div style={{ height: '4px', background: '#8B4513', borderRadius: '2px', width: `${progresoVideo}%`, transition: 'width 0.3s' }} />
+                  </div>
+                </div>
+              )}
+              <button onClick={subirVideos} disabled={subiendoVideo || videosFiles.length === 0} style={{ fontFamily: 'Georgia, serif', fontSize: '12px', letterSpacing: '2px', padding: '10px 32px', background: subiendoVideo ? '#3a2e22' : '#8B4513', color: '#e8dcc8', border: 'none', cursor: subiendoVideo ? 'wait' : 'pointer' }}>
+                {subiendoVideo ? `SUBIENDO ${progresoVideo}%` : `SUBIR ${videosFiles.length} VIDEOS`}
+              </button>
+            </div>
+          </>
         )}
 
         {['coche', 'moto', 'museo', 'grupo', 'otro'].map(tipo => {
@@ -165,9 +213,30 @@ export default function Concentraciones({ admin, setPagina }) {
           )
         })}
 
-        {fotos.length === 0 && (
+        {videos.length > 0 && (
+          <div style={{ marginBottom: '48px' }}>
+            <div style={{ fontFamily: 'Georgia, serif', fontSize: '20px', letterSpacing: '4px', color: '#c8a96e', marginBottom: '16px', borderBottom: '1px solid #2a2018', paddingBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+              <span>VIDEOS</span>
+              <span style={{ fontSize: '13px', color: '#6a5a44' }}>{videos.length} videos</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+              {videos.map(v => (
+                <div key={v.id} style={{ background: '#0a0806', border: '1px solid #2a2018' }}>
+                  <video controls style={{ width: '100%', maxHeight: '240px', background: '#000', display: 'block' }}>
+                    <source src={`${API}/uploads/${v.video}`} type="video/mp4" />
+                  </video>
+                  {v.pie_video && (
+                    <div style={{ padding: '8px 12px', fontSize: '12px', color: '#c8a96e', fontFamily: 'Georgia, serif', letterSpacing: '1px' }}>{v.pie_video}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {fotos.length === 0 && videos.length === 0 && (
           <div style={{ textAlign: 'center', padding: '40px', color: '#6a5a44', fontFamily: 'Georgia, serif', letterSpacing: '2px' }}>
-            AUN NO HAY FOTOS EN ESTA CONCENTRACION
+            AUN NO HAY FOTOS NI VIDEOS EN ESTA CONCENTRACION
           </div>
         )}
 
@@ -228,7 +297,7 @@ export default function Concentraciones({ admin, setPagina }) {
             <div style={{ fontSize: '12px', color: '#8B4513', letterSpacing: '2px', marginBottom: '4px' }}>{conc.fecha}</div>
             {conc.lugar && <div style={{ fontSize: '12px', color: '#6a5a44' }}>📍 {conc.lugar}</div>}
             {conc.descripcion && <div style={{ fontSize: '12px', color: '#a89070', marginTop: '8px', lineHeight: '1.5' }}>{conc.descripcion}</div>}
-            <div style={{ fontSize: '11px', color: '#8B4513', marginTop: '12px', letterSpacing: '2px' }}>VER FOTOS →</div>
+            <div style={{ fontSize: '11px', color: '#8B4513', marginTop: '12px', letterSpacing: '2px' }}>VER FOTOS Y VIDEOS →</div>
           </div>
         ))}
       </div>
