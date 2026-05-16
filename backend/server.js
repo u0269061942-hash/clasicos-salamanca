@@ -12,7 +12,10 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  next()
+}, express.static(path.join(__dirname, 'uploads')))
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -121,8 +124,19 @@ app.get('/api/concentraciones/:id/fotos', (req, res) => {
   const fotos = db.prepare('SELECT * FROM fotos_concentracion WHERE concentracion_id = ?').all(req.params.id)
   res.json(fotos)
 })
+app.post('/api/concentraciones/:id/videos', upload.single('video'), (req, res) => {
+  const { pie_video } = req.body
+  const video = req.file ? req.file.filename : null
+  db.prepare(`INSERT INTO videos_concentracion (concentracion_id, video, pie_video) VALUES (?, ?, ?)`).run(req.params.id, video, pie_video)
+  res.json({ ok: true })
+})
+app.get('/api/concentraciones/:id/videos', (req, res) => {
+  const videos = db.prepare('SELECT * FROM videos_concentracion WHERE concentracion_id = ?').all(req.params.id)
+  res.json(videos)
+})
 app.delete('/api/concentraciones/:id', (req, res) => {
   db.prepare('DELETE FROM fotos_concentracion WHERE concentracion_id = ?').run(req.params.id)
+  db.prepare('DELETE FROM videos_concentracion WHERE concentracion_id = ?').run(req.params.id)
   db.prepare('DELETE FROM concentraciones WHERE id = ?').run(req.params.id)
   res.json({ ok: true })
 })
