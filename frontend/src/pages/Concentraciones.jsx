@@ -3,7 +3,7 @@ import BotonInicio from '../components/BotonInicio'
 
 const API = 'https://clasicos-salamanca-backend.onrender.com'
 
-function Galeria({ fotos }) {
+function Galeria({ fotos, admin, onEliminar }) {
   const [actual, setActual] = useState(0)
 
   useEffect(() => {
@@ -26,7 +26,14 @@ function Galeria({ fotos }) {
         <button onClick={siguiente} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>›</button>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(14,12,10,0.85)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontFamily: 'Georgia, serif', fontSize: '13px', color: '#c8a96e', letterSpacing: '2px' }}>{fotos[actual].pie_foto}</div>
-          <div style={{ fontSize: '12px', color: '#6a5a44', letterSpacing: '2px' }}>{actual + 1} / {fotos.length}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ fontSize: '12px', color: '#6a5a44', letterSpacing: '2px' }}>{actual + 1} / {fotos.length}</div>
+            {admin && onEliminar && (
+              <button onClick={() => { onEliminar(fotos[actual].id); setActual(0) }} style={{ fontSize: '11px', padding: '3px 10px', background: 'transparent', border: '1px solid #3a2e22', color: '#6a5a44', cursor: 'pointer' }}>
+                Eliminar
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div style={{ display: 'flex', gap: '6px', padding: '12px', overflowX: 'auto', background: '#0e0c0a' }}>
@@ -232,7 +239,7 @@ export default function Concentraciones({ admin, setPagina }) {
                 <span>{labels[tipo]}</span>
                 <span style={{ fontSize: '13px', color: '#6a5a44' }}>{fotosTipo.length} fotos</span>
               </div>
-              <Galeria fotos={fotosTipo} />
+              <Galeria fotos={fotosTipo} admin={admin} onEliminar={eliminarFoto} />
             </div>
           )
         })}
