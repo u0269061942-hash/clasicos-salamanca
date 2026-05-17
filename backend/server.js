@@ -1,34 +1,32 @@
 import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import { v2 as cloudinary } from 'cloudinary'
+import { Readable } from 'stream'
 import 'dotenv/config'
 import db from './database.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const app = express()
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
+const app = express()
 app.use(cors())
 app.use(express.json())
-app.use('/uploads', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  next()
-}, express.static(path.join(__dirname, 'uploads')))
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'uploads'))
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-})
-const upload = multer({ storage })
+const upload = multer({ storage: multer.memoryStorage() })
 
-import { mkdirSync } from 'fs'
-mkdirSync(path.join(__dirname, 'uploads'), { recursive: true })
+const subirACloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream({ folder: 'clasicos-salamanca' }, (error, result) => {
+      if (error) reject(error)
+      else resolve(result.secure_url)
+    })
+    Readable.from(buffer).pipe(stream)
+  })
+}
 
 // LOGIN
 app.post('/api/login', (req, res) => {
@@ -47,7 +45,8 @@ app.get('/api/coches', async (req, res) => {
 })
 app.post('/api/coches', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, cilindrada, color, descripcion, propietario } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   const result = await db.execute({ sql: `INSERT INTO coches (marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, cilindrada, color, descripcion, propietario, foto] })
   res.json({ id: result.lastInsertRowid })
 })
@@ -63,7 +62,8 @@ app.get('/api/motos', async (req, res) => {
 })
 app.post('/api/motos', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, cilindrada, tipo, descripcion, propietario } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   const result = await db.execute({ sql: `INSERT INTO motos (marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, cilindrada, tipo, descripcion, propietario, foto] })
   res.json({ id: result.lastInsertRowid })
 })
@@ -79,7 +79,8 @@ app.get('/api/bicicletas', async (req, res) => {
 })
 app.post('/api/bicicletas', upload.single('foto'), async (req, res) => {
   const { marca, modelo, anyo, tipo, descripcion, curiosidad } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   const result = await db.execute({ sql: `INSERT INTO bicicletas (marca, modelo, anyo, tipo, descripcion, curiosidad, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`, args: [marca, modelo, anyo, tipo, descripcion, curiosidad, foto] })
   res.json({ id: result.lastInsertRowid })
 })
@@ -95,7 +96,8 @@ app.get('/api/juguetes', async (req, res) => {
 })
 app.post('/api/juguetes', upload.single('foto'), async (req, res) => {
   const { marca, nombre, anyo, material, rareza, descripcion } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   const result = await db.execute({ sql: `INSERT INTO juguetes (marca, nombre, anyo, material, rareza, descripcion, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`, args: [marca, nombre, anyo, material, rareza, descripcion, foto] })
   res.json({ id: result.lastInsertRowid })
 })
@@ -116,7 +118,8 @@ app.post('/api/concentraciones', async (req, res) => {
 })
 app.post('/api/concentraciones/:id/fotos', upload.single('foto'), async (req, res) => {
   const { tipo, pie_foto } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   await db.execute({ sql: `INSERT INTO fotos_concentracion (concentracion_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`, args: [req.params.id, foto, tipo, pie_foto] })
   res.json({ ok: true })
 })
@@ -153,7 +156,8 @@ app.post('/api/museos', async (req, res) => {
 })
 app.post('/api/museos/:id/fotos', upload.single('foto'), async (req, res) => {
   const { tipo, pie_foto } = req.body
-  const foto = req.file ? req.file.filename : null
+  let foto = null
+  if (req.file) foto = await subirACloudinary(req.file.buffer)
   await db.execute({ sql: `INSERT INTO fotos_museo (museo_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`, args: [req.params.id, foto, tipo, pie_foto] })
   res.json({ ok: true })
 })
