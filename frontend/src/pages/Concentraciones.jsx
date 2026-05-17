@@ -223,7 +223,7 @@ export default function Concentraciones({ admin, setPagina }) {
               {videos.map(v => (
                 <div key={v.id} style={{ background: '#0a0806', border: '1px solid #2a2018' }}>
                   <video controls style={{ width: '100%', maxHeight: '240px', background: '#000', display: 'block' }}>
-                    <source src={`${API}/uploads/${v.video}`} type="video/mp4" />
+                    <source src={v.video} type="video/mp4" />
                   </video>
                   {v.pie_video && (
                     <div style={{ padding: '8px 12px', fontSize: '12px', color: '#c8a96e', fontFamily: 'Georgia, serif', letterSpacing: '1px' }}>{v.pie_video}</div>

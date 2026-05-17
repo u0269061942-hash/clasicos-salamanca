@@ -129,7 +129,8 @@ app.get('/api/concentraciones/:id/fotos', async (req, res) => {
 })
 app.post('/api/concentraciones/:id/videos', upload.single('video'), async (req, res) => {
   const { pie_video } = req.body
-  const video = req.file ? req.file.filename : null
+  let video = null
+  if (req.file) video = await subirACloudinary(req.file.buffer)
   await db.execute({ sql: `INSERT INTO videos_concentracion (concentracion_id, video, pie_video) VALUES (?, ?, ?)`, args: [req.params.id, video, pie_video] })
   res.json({ ok: true })
 })
