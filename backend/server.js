@@ -18,6 +18,16 @@ app.use(express.json())
 
 const upload = multer({ storage: multer.memoryStorage() })
 
+const subirVideoACloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream({ folder: 'clasicos-salamanca', resource_type: 'video' }, (error, result) => {
+      if (error) reject(error)
+      else resolve(result.secure_url)
+    })
+    Readable.from(buffer).pipe(stream)
+  })
+}
+
 const subirACloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream({ folder: 'clasicos-salamanca' }, (error, result) => {
@@ -130,7 +140,7 @@ app.get('/api/concentraciones/:id/fotos', async (req, res) => {
 app.post('/api/concentraciones/:id/videos', upload.single('video'), async (req, res) => {
   const { pie_video } = req.body
   let video = null
-  if (req.file) video = await subirACloudinary(req.file.buffer)
+  if (req.file) video = await subirVideoACloudinary(req.file.buffer)
   await db.execute({ sql: `INSERT INTO videos_concentracion (concentracion_id, video, pie_video) VALUES (?, ?, ?)`, args: [req.params.id, video, pie_video] })
   res.json({ ok: true })
 })
