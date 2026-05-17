@@ -77,7 +77,7 @@ export default function Bicicletas({ admin, setPagina }) {
           <div key={bici.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {bici.foto
               ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${bici.foto}`} alt={bici.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
-              : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🚲</div>
+              : <div style={{ width: "100%", height: "180px", background: "#1a1410" }}></div>
             }
             <div style={{ padding: '16px' }}>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', color: '#c8a96e', fontWeight: 'bold', letterSpacing: '2px' }}>{bici.marca} {bici.modelo}</div>

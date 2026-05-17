@@ -74,7 +74,7 @@ export default function Motos({ admin }) {
           <div key={moto.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {moto.foto
               ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${moto.foto}`} alt={moto.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
-              : <div style={{ width: '100%', height: '180px', background: '#1a1410', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🏍️</div>
+              : <div style={{ width: "100%", height: "180px", background: "#1a1410" }}></div>
             }
             <div style={{ padding: '16px' }}>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', color: '#c8a96e', fontWeight: 'bold', letterSpacing: '2px' }}>{moto.marca} {moto.modelo}</div>
