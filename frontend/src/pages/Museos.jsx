@@ -19,7 +19,7 @@ function Galeria({ fotos }) {
   return (
     <div style={{ position: 'relative', background: '#0a0806', border: '1px solid #2a2018', overflow: 'hidden' }}>
       <div style={{ position: 'relative', height: '480px' }}>
-        <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${fotos[actual].foto}`} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
+        <img src={fotos[actual].foto} alt={fotos[actual].pie_foto} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'sepia(10%)' }} />
         <button onClick={anterior} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer' }}>‹</button>
         <button onClick={siguiente} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(14,12,10,0.8)', border: '1px solid #8B4513', color: '#c8a96e', fontSize: '24px', width: '48px', height: '48px', cursor: 'pointer' }}>›</button>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(14,12,10,0.85)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -29,7 +29,7 @@ function Galeria({ fotos }) {
       </div>
       <div style={{ display: 'flex', gap: '6px', padding: '12px', overflowX: 'auto', background: '#0e0c0a' }}>
         {fotos.map((foto, i) => (
-          <img key={foto.id} src={`https://clasicos-salamanca-backend.onrender.com/uploads/${foto.foto}`} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
+          <img key={foto.id} src={foto.foto} alt={foto.pie_foto} onClick={() => setActual(i)} style={{ width: '60px', height: '45px', objectFit: 'cover', cursor: 'pointer', filter: i === actual ? 'sepia(0%)' : 'sepia(40%) brightness(0.6)', border: i === actual ? '2px solid #8B4513' : '1px solid #2a2018', flexShrink: 0 }} />
         ))}
       </div>
     </div>
