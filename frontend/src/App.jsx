@@ -52,7 +52,7 @@ function App() {
             <div style={{ fontFamily: 'Georgia, serif', fontSize: '22px', letterSpacing: '4px', color: '#c8a96e', marginBottom: '8px' }}>ZONA ADMIN</div>
             <div style={{ fontSize: '12px', color: '#6a5a44', letterSpacing: '2px', marginBottom: '24px' }}>ACCESO RESTRINGIDO</div>
             <input
-              type="password"
+              type="password" autoComplete="new-password"
               placeholder="Contraseña"
               value={password}
               onChange={e => setPassword(e.target.value)}
