@@ -73,7 +73,7 @@ export default function Motos({ admin }) {
         {motos.map(moto => (
           <div key={moto.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {moto.foto
-              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${moto.foto}`} alt={moto.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
+              ? <img src={moto.foto} alt={moto.modelo} style={{ width: '100%', height: '180px', objectFit: 'cover', filter: 'sepia(20%)' }} />
               : <div style={{ width: "100%", height: "180px", background: "#1a1410" }}></div>
             }
             <div style={{ padding: '16px' }}>

@@ -82,7 +82,7 @@ export default function Juguetes({ admin, setPagina }) {
         {juguetes.map(juguete => (
           <div key={juguete.id} style={{ background: '#120f0a', border: '1px solid #2a2018', overflow: 'hidden' }}>
             {juguete.foto
-              ? <img src={`https://clasicos-salamanca-backend.onrender.com/uploads/${juguete.foto}`} alt={juguete.nombre} style={{ width: '100%', height: '180px', objectFit: 'contain', background: '#1a1410', filter: 'sepia(20%)' }} />
+              ? <img src={juguete.foto} alt={juguete.nombre} style={{ width: '100%', height: '180px', objectFit: 'contain', background: '#1a1410', filter: 'sepia(20%)' }} />
               : <div style={{ width: "100%", height: "180px", background: "#1a1410" }}></div>
             }
             <div style={{ padding: '16px' }}>
