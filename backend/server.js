@@ -133,6 +133,16 @@ app.post('/api/concentraciones/:id/fotos', upload.single('foto'), async (req, re
   await db.execute({ sql: `INSERT INTO fotos_concentracion (concentracion_id, foto, tipo, pie_foto) VALUES (?, ?, ?, ?)`, args: [req.params.id, foto, tipo, pie_foto] })
   res.json({ ok: true })
 })
+app.delete('/api/concentraciones/:id/fotos/:fotoId', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM fotos_concentracion WHERE id = ?', args: [req.params.fotoId] })
+  res.json({ ok: true })
+})
+
+app.delete('/api/concentraciones/:id/videos/:videoId', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM videos_concentracion WHERE id = ?', args: [req.params.videoId] })
+  res.json({ ok: true })
+})
+
 app.get('/api/concentraciones/:id/fotos', async (req, res) => {
   const result = await db.execute({ sql: 'SELECT * FROM fotos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
   res.json(result.rows)
