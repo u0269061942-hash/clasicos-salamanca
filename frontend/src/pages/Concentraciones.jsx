@@ -100,6 +100,18 @@ export default function Concentraciones({ admin, setPagina }) {
     setVideos(await res.json())
   }
 
+  const eliminarFoto = async (fotoId) => {
+    await fetch(`${API}/api/concentraciones/${seleccionada.id}/fotos/${fotoId}`, { method: 'DELETE' })
+    const res = await fetch(`${API}/api/concentraciones/${seleccionada.id}/fotos`)
+    setFotos(await res.json())
+  }
+
+  const eliminarVideo = async (videoId) => {
+    await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos/${videoId}`, { method: 'DELETE' })
+    const res = await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos`)
+    setVideos(await res.json())
+  }
+
   const subirFotos = async () => {
     if (fotosFiles.length === 0) return
     setSubiendo(true)
@@ -239,6 +251,11 @@ export default function Concentraciones({ admin, setPagina }) {
                   </video>
                   {v.pie_video && (
                     <div style={{ padding: '8px 12px', fontSize: '12px', color: '#c8a96e', fontFamily: 'Georgia, serif', letterSpacing: '1px' }}>{v.pie_video}</div>
+                  )}
+                  {admin && (
+                    <button onClick={() => eliminarVideo(v.id)} style={{ margin: '8px 12px', fontSize: '11px', padding: '4px 12px', background: 'transparent', border: '1px solid #3a2e22', color: '#6a5a44', cursor: 'pointer' }}>
+                      Eliminar video
+                    </button>
                   )}
                   {admin && (
                     <button onClick={() => eliminarVideo(v.id)} style={{ margin: '8px 12px', fontSize: '11px', padding: '4px 12px', background: 'transparent', border: '1px solid #3a2e22', color: '#6a5a44', cursor: 'pointer' }}>

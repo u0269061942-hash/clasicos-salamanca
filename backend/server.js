@@ -143,6 +143,16 @@ app.delete('/api/concentraciones/:id/videos/:videoId', async (req, res) => {
   res.json({ ok: true })
 })
 
+app.delete('/api/concentraciones/:id/fotos/:fotoId', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM fotos_concentracion WHERE id = ?', args: [req.params.fotoId] })
+  res.json({ ok: true })
+})
+
+app.delete('/api/concentraciones/:id/videos/:videoId', async (req, res) => {
+  await db.execute({ sql: 'DELETE FROM videos_concentracion WHERE id = ?', args: [req.params.videoId] })
+  res.json({ ok: true })
+})
+
 app.get('/api/concentraciones/:id/fotos', async (req, res) => {
   const result = await db.execute({ sql: 'SELECT * FROM fotos_concentracion WHERE concentracion_id = ?', args: [req.params.id] })
   res.json(result.rows)
