@@ -118,7 +118,7 @@ export default function Concentraciones({ admin, setPagina }) {
       const fd = new FormData()
       fd.append('video', file)
       fd.append('pie_video', file.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').replace(/-/g, ' '))
-      await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos`, { method: 'POST', body: fd })
+      await fetch(`${API}/api/concentraciones/${seleccionada.id}/videos`, { method: 'POST', body: fd, signal: AbortSignal.timeout(300000) })
       setProgresoVideo(Math.round(((i + 1) / videosFiles.length) * 100))
     }
     setVideosFiles([])

@@ -16,7 +16,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const upload = multer({ storage: multer.memoryStorage() })
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 100 * 1024 * 1024 } })
 
 const subirVideoACloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
